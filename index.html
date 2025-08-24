@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Mini 3 Chat</title>
+</head>
+<body>
+    <h2>Mini 3-Person Chat</h2>
+    <div id="messages" style="border:1px solid #ccc; height:200px; overflow:auto; margin-bottom:10px;"></div>
+    <input type="text" id="msgInput" placeholder="Type your message" />
+    <button onclick="sendMessage()">Send</button>
+
+    <script>
+        const ws = new WebSocket("ws://127.0.0.1:8000/ws");
+
+        ws.onmessage = function(event) {
+            const messagesDiv = document.getElementById("messages");
+            const newMsg = document.createElement("p");
+            newMsg.textContent = event.data;
+            messagesDiv.appendChild(newMsg);
+            messagesDiv.scrollTop = messagesDiv.scrollHeight; // auto scroll
+        };
+
+        function sendMessage() {
+            const input = document.getElementById("msgInput");
+            ws.send(input.value);
+            input.value = "";
+        }
+    </script>
+</body>
+</html>
